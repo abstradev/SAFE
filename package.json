@@ -1,0 +1,25 @@
+{
+  "name": "safe",
+  "version": "0.0.1",
+  "description": "SAFE - Single App For Everything",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NOSDuco/safe.git"
+  },
+  "author": "Tony Duco <nosduco@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/NOSDuco/safe/issues"
+  },
+  "homepage": "https://github.com/NOSDuco/safe#readme",
+  "devDependencies": {
+    "electron": "^6.0.3"
+  },
+  "dependencies": {
+    "ejs": "^2.6.2"
+  }
+}
