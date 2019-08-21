@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="./safe-switcher/safe-switcher.css" />
+  </head>
+  <body style="margin:0">
+    <div class="safe-appgroup">
+      <div class="safe-tabs"></div>
+      <div class="safe-buttons"></div>
+    </div>
+    <div class="safe-views"></div>
+    <script>
+      const AppGroup = require('./safe-switcher/index');
+      
+      let appGroup = new AppGroup({
+        newApp: {
+          name: 'Test App'
+        }
+      });
+
+      appGroup.addApp({
+        title: 'Google',
+        src: 'http://google.com'
+      });
+    </script>
+  </body>
+</html>

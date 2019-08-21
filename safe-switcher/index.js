@@ -46,6 +46,18 @@ class AppGroup extends EventEmitter {
     }
   }
 
+  addApp (args) {
+    let id = this.newAppId;
+    this.newAppId++;
+    let app = new App(this, id, args);
+    this.apps.push(app);
+    if (args.active === true) {
+      this.activate();
+    }
+    this.emit('app-added', app, this);
+    return app;
+  }
+
   getApp (id) {
     for (let i in this.apps) {
       if (this.apps[i].id === id) {
@@ -93,4 +105,190 @@ class AppGroup extends EventEmitter {
     if (this.apps.length === 0) return null;
     return this.apps[0];
   }
+
 }
+
+const AppGroupPrivate = {
+  setActiveApp: app => {
+    this.apps.unshift(app);
+    this.emit('app-active', app, this);
+    return this;
+  },
+  activateRecentApp: app => {
+    if (this.apps.length > 0) {
+      this.apps[0].activate();
+    }
+    return this;
+  }
+}
+
+class App extends EventEmitter {
+  constructor (appGroup, id, args) { 
+    super();
+    this.appGroup = appGroup;
+    this.id = id;
+    this.name = args.name;
+    this.icon = args.icon;
+    this.src = args.src;
+    this.appElements = {};
+    AppPrivate.initApp.bind(this)();
+    AppPrivate.initWebview.bind(this)();
+    if (args.visible !== false) {
+      this.show();
+    }
+    if (typeof args.ready === 'function') {
+      args.ready(this);
+    }
+  }
+
+  getName () {
+    return this.name;
+  }
+
+  setName (name) {
+    this.name = name;
+  }
+
+  getIcon () {
+    return this.icon;
+  }
+
+  setIcon (icon) {
+    this.icon = icon;
+  }
+
+  setPosition (newPosition) {
+    let appContainer = this.appGroup.appContainer;
+    let apps = appContainer.children;
+    let oldPosition = this.getPosition() - 1;
+
+    if (newPosition < 0) {
+      newPosition += appContainer.childElementCount;
+
+      if (newPosition < 0) {
+        newPosition = 0;
+      }
+    } else {
+      if (newPosition > appContainer.childElementCount) {
+        newPosition = appContainer.childElementCount;
+      }
+
+      newPosition--;
+    }
+
+    if (newPosition > oldPosition) {
+      newPosition++;
+    }
+
+    appContainer.insertBefore(apps[oldPosition], apps[newPosition]);
+
+    return this;
+  }
+
+  getPosition (fromRight) {
+    let position = 0;
+    let app = this.app;
+    while ((app = app.previousSibling) != null) position++;
+
+    if (fromRight === true) {
+      position -= this.appGroup.appContainer.childElementCount;
+    }
+
+    if (position >= 0) {
+      position++;
+    }
+  }
+
+  activate () {
+    let activeApp = this.appGroup.getActiveApp();
+    if (activeApp) {
+      activeApp.app.classList.remove('active');
+      activeApp.webview.classList.remove('visible');
+    }
+    AppGroupPrivate.setActiveApp.bind(this.appGroup)(this);
+    this.app.classList.add('active');
+    this.webview.classList.add('visible');
+    this.webview.focus();
+    this.emit('active', this);
+    return this;
+  }
+
+  show (flag) {
+    if (flag !== false) {
+      this.app.classList.add('visible');
+      this.emit('visible', this);
+    } else {
+      this.app.classList.remove('visible');
+      this.emit('hidden', this);
+    }
+    return this;
+  }
+
+  hide () {
+    return this.show(false);
+  }
+
+  flash (flag) {
+    if (flag !== false) {
+      this.app.classList.add('flash');
+      this.emit('flash', this);
+    } else {
+      this.app.classList.remove('flash');
+      this.emit('unflash', this);
+    }
+    return this;
+  }
+
+  unflash () {
+    return this.flash(false);
+  }
+}
+
+const AppPrivate = {
+  initApp: () => {
+    let appClass = this.appGroup.options.appClass;
+
+    //Create app
+    let app = this.app = document.createElement('div');
+    app.classList.add(appClass);
+    for (let el of ['icon', 'name']) {
+      let span = app.appendChild(document.createElement('span'));
+      span.classList.add(`${appClass}-${el}`);
+      this.appElements[el] = span;
+    }
+
+    this.setName(this.name);
+    this.setIcon(this.icon);
+
+    AppPrivate.initAppClickHandler.bind(this)();
+    this.appGroup.appContainer.appendChild(this.app);
+  },
+  initAppClickHandler: () => {
+    const appMouseDownHandler = e => {
+      if (e.which === 1) {
+        this.activate();
+      }
+    };
+    this.app.addEventListener('mousedown', appMouseDownHandler.bind(this), false);
+  },
+  initWebview: () => {
+    this.webview = document.createElement('webview');
+
+    const appWebviewDidFinishLoadHandler = e => {
+      this.emit('webview-ready', this);
+    };
+
+    this.webview.addEventListener('did-finish-load', appWebviewDidFinishLoadHandler.bind(this), false);
+    this.webview.classList.add(this.appGroup.options.viewClass);
+    if (this.webviewAttributes) {
+      let attrs = this.webviewAttributes;
+      for (let key in attrs) {
+        this.webview.setAttribute(key, attrs[key]);
+      }
+    }
+
+    this.appgroup.viewContainer.appendChild(this.webview);
+  }
+};
+
+module.exports = AppGroup;
