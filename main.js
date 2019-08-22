@@ -14,12 +14,18 @@ function createWindow () {
     }
   })
 
+  mainWindow.setMenu(null);
+
   mainWindow.loadFile('index.html')
 
   mainWindow.on('closed', function () {
     mainWindow = null
   })
 }
+
+app.on('browser-window-created', function (e, window) {
+    window.setMenu(null);
+});
 
 app.on('ready', createWindow)
 

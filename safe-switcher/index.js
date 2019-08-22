@@ -260,6 +260,9 @@ const AppPrivate = {
       span.classList.add(`${appClass}-${el}`);
       this.appElements[el] = span;
     }
+    let iconEle = app.appendChild(document.createElement('img'));
+    iconEle.classList.add('safe-app-icon');
+    iconEle.src = this.icon;
 
     this.setTitle(this.title);
     this.setIcon(this.icon);

@@ -10,44 +10,51 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  width: 60px;
   height: 100%;
   text-align: center;
   z-index: 200;
+  background: #2d2f31;
   overflow: none;
 }
 
 .safe-appgroup {
+  z-index: 100;
   display: flex;
   flex-direction: column;
   flex-shrink: 1;
-  background-color: #ccc;
+  background-color: #2d2f31;
   cursor: default;
   font: caption;
+  width: 60px;
   font-size: 14px;
   -webkit-user-select: none;
   user-select: none;
 }
 
 .safe-apps {
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .safe-app {
+  align-items: center;
   display: none;
   position: relative;
-  color: #333;
-  height: 22px;
-  width: 100%;
-  padding: 6px 8px 4px;
-  border: 1px solid #aaa;
-  border-bottom: none;
-  border-left: none;
-  background: rgba(234, 234, 234, 1);
+  justify-content: center;
+  height: 65px;
+  min-height: 50px;
+  width: 60px;
+  margin: 0;
   font: caption;
   font-size: 14px;
-  background-color: #ccc;
+  background: #2d2f31;
   cursor: default;
   left: 0;
+  overflow-x: none;
 }
 
 .safe-app:first-child {
@@ -57,11 +64,13 @@
 .safe-app.visible {
   /* display: inline-block; */
   display: flex;
-  overflow: none;
 }
 
 .safe-app.active {
-  background: #fff;
+  background: #47494b;
+  box-sizing: border-box;
+  border-left-color: #EF6C00;
+  border-left-size: 2px;
 }
 
 .safe-app.flash {
@@ -89,7 +98,7 @@
 
 .safe-app-icon {
   display: inline-block;
-  height: 16px;
+  height: 34px;
 }
 
 .safe-app-icon img {

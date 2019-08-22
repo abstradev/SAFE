@@ -12,24 +12,6 @@
       </div>
     </div>
     <div class="safe-views"></div>
-    <script>
-      const AppGroup = require('./safe-switcher/index');
-      
-      let appGroup = new AppGroup({
-        newApp: {
-          name: 'Test App'
-        }
-      });
-
-      appGroup.addApp({
-        title: 'Google',
-        src: 'https://google.com'
-      });
-
-      appGroup.addApp({
-        title: 'YouTube',
-        src: 'https://youtube.com'
-      });
-    </script>
+    <script src="./renderer.js"></script>
   </body>
 </html>
