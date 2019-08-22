@@ -1,3 +1,11 @@
+.safe-body {
+  display: flex;
+  height: 100vh;
+  width: 100%;
+  overflow: none;
+  margin: 0;
+}
+
 .safe-sidebar {
   align-items: center;
   display: flex;
@@ -6,6 +14,7 @@
   height: 100%;
   text-align: center;
   z-index: 200;
+  overflow: none;
 }
 
 .safe-appgroup {
@@ -38,6 +47,7 @@
   font-size: 14px;
   background-color: #ccc;
   cursor: default;
+  left: 0;
 }
 
 .safe-app:first-child {
@@ -45,8 +55,9 @@
 }
 
 .safe-app.visible {
-  display: inline-block;
-  float: left;
+  /* display: inline-block; */
+  display: flex;
+  overflow: none;
 }
 
 .safe-app.active {
@@ -88,6 +99,7 @@
 
 .safe-views {
   position: relative;
+  width: calc(100% - 60px);
   display: flex;
   flex: 1;
   flex-direction: column;
