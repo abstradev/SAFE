@@ -253,7 +253,7 @@ const AppPrivate = {
     let appClass = this.appGroup.options.appClass;
 
     //Create app
-    let app = this.app = document.createElement('div');
+    let app = this.app = document.createElement('li');
     app.classList.add(appClass);
     for (let el of ['icon', 'title']) {
       let span = app.appendChild(document.createElement('span'));
@@ -276,16 +276,13 @@ const AppPrivate = {
     this.app.addEventListener('mousedown', appMouseDownHandler.bind(this), false);
   },
   initWebview: function() {
-    console.log('init webview');
     this.webview = document.createElement('webview');
 
     const appWebviewDidFinishLoadHandler = function (e) {
-      console.log('ready');
       this.emit('webview-ready', this);
     };
 
     const appWebviewDidStartLoadingHandler = function (e) {
-      console.log('test');
       this.webview.classList.add('loading');
     }
 
