@@ -30,17 +30,18 @@ if (!document) {
 class AppGroup extends EventEmitter {
   constructor (args = {}) {
     super();
-    let options = this.options = {
+    let options = {
       appContainerSelector: '.safe-apps',
       viewsContainerSelector: '.safe-views',
       appClass: 'safe-app',
       viewClass: 'safe-view',
       ready: args.ready
     };
+    this.options = options;
     this.appContainer = document.querySelector(options.appContainerSelector);
     this.viewContainer = document.querySelector(options.viewsContainerSelector);
     this.apps = [];
-    this.currentApp = 0;
+    this.newAppId = 0;
     if (typeof this.options.ready === 'function') {
       this.options.ready(this);
     }
@@ -109,12 +110,12 @@ class AppGroup extends EventEmitter {
 }
 
 const AppGroupPrivate = {
-  setActiveApp: app => {
+  setActiveApp: function (app) {
     this.apps.unshift(app);
     this.emit('app-active', app, this);
     return this;
   },
-  activateRecentApp: app => {
+  activateRecentApp: function (app)  {
     if (this.apps.length > 0) {
       this.apps[0].activate();
     }
@@ -127,10 +128,13 @@ class App extends EventEmitter {
     super();
     this.appGroup = appGroup;
     this.id = id;
-    this.name = args.name;
+    this.title = args.title;
     this.icon = args.icon;
     this.src = args.src;
     this.appElements = {};
+    this.webviewAttributes = {};
+    this.webviewAttributes.src = args.src;
+    this.webviewAttributes.id = args.title;
     AppPrivate.initApp.bind(this)();
     AppPrivate.initWebview.bind(this)();
     if (args.visible !== false) {
@@ -141,12 +145,12 @@ class App extends EventEmitter {
     }
   }
 
-  getName () {
-    return this.name;
+  getTitle () {
+    return this.title;
   }
 
-  setName (name) {
-    this.name = name;
+  setTitle (title) {
+    this.title = title;
   }
 
   getIcon () {
@@ -245,40 +249,46 @@ class App extends EventEmitter {
 }
 
 const AppPrivate = {
-  initApp: () => {
+  initApp: function () {
     let appClass = this.appGroup.options.appClass;
 
     //Create app
     let app = this.app = document.createElement('div');
     app.classList.add(appClass);
-    for (let el of ['icon', 'name']) {
+    for (let el of ['icon', 'title']) {
       let span = app.appendChild(document.createElement('span'));
       span.classList.add(`${appClass}-${el}`);
       this.appElements[el] = span;
     }
 
-    this.setName(this.name);
+    this.setTitle(this.title);
     this.setIcon(this.icon);
 
     AppPrivate.initAppClickHandler.bind(this)();
     this.appGroup.appContainer.appendChild(this.app);
   },
-  initAppClickHandler: () => {
-    const appMouseDownHandler = e => {
+  initAppClickHandler: function() {
+    const appMouseDownHandler = function (e) {
       if (e.which === 1) {
         this.activate();
       }
     };
     this.app.addEventListener('mousedown', appMouseDownHandler.bind(this), false);
   },
-  initWebview: () => {
+  initWebview: function() {
+    console.log('init webview');
     this.webview = document.createElement('webview');
 
-    const appWebviewDidFinishLoadHandler = e => {
+    const appWebviewDidFinishLoadHandler = function (e) {
+      console.log('ready');
       this.emit('webview-ready', this);
     };
 
-    this.webview.addEventListener('did-finish-load', appWebviewDidFinishLoadHandler.bind(this), false);
+    const appWebviewDidStartLoadingHandler = function (e) {
+      console.log('test');
+      this.webview.classList.add('loading');
+    }
+
     this.webview.classList.add(this.appGroup.options.viewClass);
     if (this.webviewAttributes) {
       let attrs = this.webviewAttributes;
@@ -286,8 +296,10 @@ const AppPrivate = {
         this.webview.setAttribute(key, attrs[key]);
       }
     }
+    this.appGroup.viewContainer.appendChild(this.webview);
+    this.webview.addEventListener('did-finish-load', appWebviewDidFinishLoadHandler.bind(this));
+    this.webview.addEventListener('did-start-loading', appWebviewDidStartLoadingHandler.bind(this));
 
-    this.appgroup.viewContainer.appendChild(this.webview);
   }
 };
 
