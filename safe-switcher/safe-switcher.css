@@ -69,8 +69,7 @@
 .safe-app.active {
   background: #47494b;
   box-sizing: border-box;
-  border-left-color: #EF6C00;
-  border-left-size: 2px;
+  border-left: 4px solid #EF6C00;
 }
 
 .safe-app.flash {
