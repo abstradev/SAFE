@@ -8,12 +8,16 @@ const config = new Config({
     version: 1,
     apps: [
       {
-        title: 'Google Calendar',
-        src: 'https://calendar.google.com',
-        icon: {
-          name: 'google-calendar',
-          path: ''
-        }
+        app: 'gmail'
+      },
+      {
+        app: 'google-calendar',
+      },
+      {
+        app: 'slack'
+      },
+      {
+        app: 'android-messages'
       },
       {
         title: 'YouTube',
@@ -35,11 +39,23 @@ let appGroup = new AppGroup({
 
 //Integrate each app
 config.get('apps').forEach(app => {
-  const icon = app.icon.name ? `./apps/${app.icon.name}/icon.svg` : app.icon.path;
-  const { title, src } = app;
-  appGroup.addApp({
-    title,
-    src,
-    icon
-  });
+  if (app.app) {
+    //Built-in
+    const bApp = require(`./apps/${app.app}`);
+    const icon = `./apps/${bApp.icon.name}/icon.svg`;
+    const { title, src } = bApp;
+    appGroup.addApp({
+      title,
+      src,
+      icon
+    });
+  } else if (app.custom) {
+    const icon = app.icon.name ? `./apps/${app.icon.name}/icon.svg` : app.icon.path;
+    const { title, src } = app;
+    appGroup.addApp({
+      title,
+      src,
+      icon
+    });
+  }
 });
