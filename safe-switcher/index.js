@@ -1,5 +1,6 @@
 // Source Switcher
 const EventEmitter = require('events');
+const hash = require('object-hash');
 
 if (!document) {
   throw Error("Must be in a renderer");
@@ -132,10 +133,12 @@ class App extends EventEmitter {
     this.icon = args.icon;
     this.src = args.src;
     this.appElements = {};
+    const appHash = hash(args);
     this.webviewAttributes = {
       autosize: 'on',
       useragent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) safe/0.0.1 Chrome/69.0.3497.128 Electron/4.2.8 Safari/537.36',
-      allowpopups: 'on'
+      allowpopups: 'on',
+      partition: `persist:${appHash}`
     };
     this.webviewAttributes.src = args.src;
     this.webviewAttributes.id = args.title;

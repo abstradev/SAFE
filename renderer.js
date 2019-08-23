@@ -1,21 +1,45 @@
 const AppGroup = require('./safe-switcher/index');
+const Config = require('./config');
 
-let appGroup = new AppGroup({
-  newApp: {
-    name: 'Test App'
+//Read/load config or default config
+const config = new Config({
+  configName: 'config',
+  defaults: {
+    version: 1,
+    apps: [
+      {
+        title: 'Google Calendar',
+        src: 'https://calendar.google.com',
+        icon: {
+          name: 'google-calendar',
+          path: ''
+        }
+      },
+      {
+        title: 'YouTube',
+        src: 'https://youtube.com',
+        icon: {
+          path: ''
+        }
+      }
+    ]
   }
 });
 
-appGroup.addApp({
-  title: 'Google Calendar',
-  src: 'https://calendar.google.com',
-  icon: './apps/google-calendar/icon.svg'
+//Create initial app group
+let appGroup = new AppGroup({
+  newApp: {
+    name: 'SAFE'
+  }
 });
 
-appGroup.addApp({
-  title: 'YouTube',
-  src: 'https://youtube.com'
+//Integrate each app
+config.get('apps').forEach(app => {
+  const icon = app.icon.name ? `./apps/${app.icon.name}/icon.svg` : app.icon.path;
+  const { title, src } = app;
+  appGroup.addApp({
+    title,
+    src,
+    icon
+  });
 });
-
-appGroup.getAppByPosition(0).activate();
-
