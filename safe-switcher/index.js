@@ -116,10 +116,13 @@ class App extends EventEmitter {
       autosize: 'on',
       useragent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) safe/0.0.1 Chrome/69.0.3497.128 Electron/4.2.8 Safari/537.36',
       allowpopups: 'on',
-      partition: `persist:${appHash}`
+      partition: `persist:${appHash}`,
+      preload: './webview/perload.js'
     };
     this.webviewAttributes.src = args.src;
     this.webviewAttributes.id = args.title;
+    this.path = args.path;
+    this.preload = args.preload;
     AppPrivate.initApp.bind(this)();
     AppPrivate.initWebview.bind(this)();
     if (args.visible !== false) {
@@ -190,12 +193,12 @@ class App extends EventEmitter {
 
   activate () {
     let activeApp = this.appGroup.getActiveApp();
-    let selectAppView = document.getElementById('safe-select-app');
+    let safeOverlay = document.getElementById('safe-overlay');
     if (activeApp) {
       activeApp.app.classList.remove('active');
       activeApp.webviewWrapper.classList.remove('visible');
     }
-    selectAppView.classList.remove('not-selected');
+    safeOverlay.classList.remove('not-selected');
     AppGroupPrivate.setActiveApp.bind(this.appGroup)(this);
     this.app.classList.add('active');
     this.webviewWrapper.classList.add('visible');
@@ -294,7 +297,11 @@ const AppPrivate = {
     this.webview.addEventListener('did-finish-load', appWebviewDidFinishLoadHandler.bind(this));
     this.webview.addEventListener('did-start-loading', appWebviewDidStartLoadingHandler.bind(this));
     this.webview.addEventListener('did-stop-loading', appWebviewDidStopLoadingHandler.bind(this));
-
+    this.webview.addEventListener('dom-ready', () => {
+      if (this.preload) {
+        this.webview.executeJavaScript(`${this.path}/preload.js`);
+      }
+    });
   }
 };
 

@@ -131,6 +131,9 @@ body {
   z-index: 100;
 }
 
+.safe-view-wrapper.visible.loading {
+}
+
 webview {
   display: inline-flex;
   width: 100%;
@@ -143,24 +146,26 @@ webview {
 
 .safe-view { }
 
-#safe-select-app.not-selected {
+#safe-overlay.not-selected {
   z-index: 200;
 }
 
-#safe-select-app {
+#safe-overlay {
   z-index: 0;
   position: absolute;
   background: #1C1C1C;
   height: 100%;
   width: 100%;
-  text-align: center;
   color: #ADADAD;
   font-size: 2em;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
 }
 
 .safe-select-app-text {
   display: inline-block;
   vertical-align: middle;
   line-height: normal;
-  margin: auto;
 }

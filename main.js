@@ -9,7 +9,6 @@ function createWindow () {
     height: 600,
     title: 'Safe',
     webPreferences: {
-      preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       webviewTag: true
     }

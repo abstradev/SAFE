@@ -1,12 +1,16 @@
 const electron = require('electron');
 const path = require('path');
 const fs = require('fs');
+const ncp = require('ncp').ncp;
 
 class Config {
   constructor(opts) {
-    const userDataPath = (electron.app || electron.remote.app).getPath('userData');
-    this.path = path.join(userDataPath, opts.configName + '.json');
-    this.data = parseDataFile(this.path, opts.defaults);
+    const homePath = (electron.app || electron.remote.app).getPath('home');
+    this.safePath = path.join(homePath, '.safe');
+    this.safeCustomPath = path.join(this.safePath, 'custom');
+    this.safeConfigPath = path.join(this.safePath, opts.configName + '.json');
+    this.data = parseDataFile(this.safeConfigPath, opts.defaults);
+    this.save();
   }
   
   get(key) {
@@ -15,7 +19,28 @@ class Config {
   
   set(key, val) {
     this.data[key] = val;
-    fs.writeFileSync(this.path, JSON.stringify(this.data));
+    fs.writeFileSync(this.safeConfigPath, JSON.stringify(this.data, null, 4));
+  }
+
+  save() {
+    if (!fs.existsSync(this.safePath)) {
+      //First run
+      fs.mkdirSync(this.safePath);
+      fs.mkdirSync(this.safeCustomPath);
+      ncp('./custom/', this.safeCustomPath, err => {
+        fs.writeFileSync(this.safeConfigPath, JSON.stringify(this.data, null, 4));
+      });
+    } else {
+        fs.writeFileSync(this.safeConfigPath, JSON.stringify(this.data, null, 4));
+    }
+  }
+
+  getSafePath() {
+    return this.safePath;
+  }
+
+  getCustomPath() {
+    return this.safeCustomPath;
   }
 }
 

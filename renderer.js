@@ -1,5 +1,6 @@
 const AppGroup = require('./safe-switcher/index');
 const Config = require('./config');
+const { ipcMain } = require('electron');
 
 //Read/load config or default config
 const config = new Config({
@@ -20,19 +21,14 @@ const config = new Config({
         app: 'android-messages'
       },
       {
-        title: 'YouTube',
-        src: 'https://youtube.com',
-        icon: {
-          path: ''
-        }
+        custom: 'google-example'
       }
     ]
   }
 });
 
 //Create initial app group
-let appGroup = new AppGroup({
-  newApp: {
+let appGroup = new AppGroup({ newApp: {
     name: 'SAFE'
   }
 });
@@ -42,20 +38,31 @@ config.get('apps').forEach(app => {
   if (app.app) {
     //Built-in
     const bApp = require(`./apps/${app.app}`);
-    const icon = `./apps/${bApp.icon.name}/icon.svg`;
-    const { title, src } = bApp;
+    const icon = bApp.icon ? `./apps/${app.app}/icon.svg` : '';
+    const { title, src, preload } = bApp;
     appGroup.addApp({
+      path: `./apps/${app.app}`,
       title,
       src,
-      icon
+      icon,
+      preload
     });
   } else if (app.custom) {
-    const icon = app.icon.name ? `./apps/${app.icon.name}/icon.svg` : app.icon.path;
-    const { title, src } = app;
+    //Custom
+    const cApp = require(`${config.getCustomPath()}/${app.custom}`);
+    const icon = cApp.icon ? `${config.getCustomPath()}/${app.custom}/icon.svg` : '';
+    const { title, src, preload } = cApp;
     appGroup.addApp({
+      pathName: `${config.getCustomPath()}/${app.custom}`,
       title,
       src,
-      icon
+      icon,
+      preload
     });
   }
+});
+
+ipcMain.on('notification', (event, arg) => {
+  console.log(event);
+  console.log(arg);
 });
