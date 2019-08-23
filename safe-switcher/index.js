@@ -6,28 +6,6 @@ if (!document) {
   throw Error("Must be in a renderer");
 }
 
-// Global styles for apps
-(() => {
-  const styles = `
-    webview {
-      width: 0px;
-      height: 0px;
-    }
-
-    webview.visible {
-      width: 100%;
-      height: 100%;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-    }
-  `;
-  let tag = document.createElement('style');
-  tag.innerHTML = styles;
-  document.getElementsByTagName('head')[0].appendChild(tag);
-})();
-
 class AppGroup extends EventEmitter {
   constructor (args = {}) {
     super();
@@ -212,13 +190,15 @@ class App extends EventEmitter {
 
   activate () {
     let activeApp = this.appGroup.getActiveApp();
+    let selectAppView = document.getElementById('safe-select-app');
     if (activeApp) {
       activeApp.app.classList.remove('active');
-      activeApp.webview.classList.remove('visible');
+      activeApp.webviewWrapper.classList.remove('visible');
     }
+    selectAppView.classList.remove('not-selected');
     AppGroupPrivate.setActiveApp.bind(this.appGroup)(this);
     this.app.classList.add('active');
-    this.webview.classList.add('visible');
+    this.webviewWrapper.classList.add('visible');
     this.webview.focus();
     this.emit('active', this);
     return this;
@@ -286,6 +266,8 @@ const AppPrivate = {
     this.app.addEventListener('mousedown', appMouseDownHandler.bind(this), false);
   },
   initWebview: function() {
+    this.webviewWrapper = document.createElement('div');
+    this.webviewWrapper.classList.add('safe-view-wrapper');
     this.webview = document.createElement('webview');
 
     const appWebviewDidFinishLoadHandler = function (e) {
@@ -293,7 +275,11 @@ const AppPrivate = {
     };
 
     const appWebviewDidStartLoadingHandler = function (e) {
-      this.webview.classList.add('loading');
+      this.webviewWrapper.classList.add('loading');
+    }
+
+    const appWebviewDidStopLoadingHandler = function (e) {
+      this.webviewWrapper.classList.remove('loading');
     }
 
     this.webview.classList.add(this.appGroup.options.viewClass);
@@ -303,9 +289,11 @@ const AppPrivate = {
         this.webview.setAttribute(key, attrs[key]);
       }
     }
-    this.appGroup.viewContainer.appendChild(this.webview);
+    this.webviewWrapper.appendChild(this.webview);
+    this.appGroup.viewContainer.appendChild(this.webviewWrapper);
     this.webview.addEventListener('did-finish-load', appWebviewDidFinishLoadHandler.bind(this));
     this.webview.addEventListener('did-start-loading', appWebviewDidStartLoadingHandler.bind(this));
+    this.webview.addEventListener('did-stop-loading', appWebviewDidStopLoadingHandler.bind(this));
 
   }
 };
