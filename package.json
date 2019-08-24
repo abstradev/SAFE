@@ -1,10 +1,19 @@
 {
   "name": "safe",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "SAFE - Single App For Everything",
   "main": "main.js",
+  "build": {
+    "appId": "dev.abstra.safe",
+    "mac": {
+      "category": "productivity"
+    }
+  },
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
   },
   "repository": {
     "type": "git",
@@ -17,10 +26,10 @@
   },
   "homepage": "https://github.com/NOSDuco/safe#readme",
   "devDependencies": {
-    "electron": "^6.0.3"
+    "electron": "^6.0.3",
+    "electron-builder": "^21.2.0"
   },
   "dependencies": {
-    "ejs": "^2.6.2",
     "fs-extra": "^8.1.0",
     "ncp": "^2.0.0",
     "object-hash": "^1.3.1"
