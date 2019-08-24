@@ -14,11 +14,8 @@ function createWindow () {
       webviewTag: true
     }
   })
-
   mainWindow.setMenu(null);
-
   mainWindow.loadFile('index.html')
-
   mainWindow.on('close', function (event) {
     if (!app.isQuitting) {
       event.preventDefault();
