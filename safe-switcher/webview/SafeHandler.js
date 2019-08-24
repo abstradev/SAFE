@@ -16,6 +16,14 @@ class SafeHandler {
     this.loop = fn;
   }
 
+  setUserAgent(agent) {
+    ipcRenderer.sendToHost('user-agent', agent);
+  }
+
+  executeJavaScript(script) {
+    ipcRenderer.sendToHost('execute-javascript', script);
+  }
+
   setBadgeCount(newCount = 0) {
     if (this.badgeCount === newCount) return;
 
@@ -31,6 +39,10 @@ class SafeHandler {
     const styles = document.createElement('style');
     styles.innerHTML = data.toString();
     document.querySelector('head').appendChild(styles);
+  }
+
+  log(msg) {
+    console.log(msg);
   }
 }
 

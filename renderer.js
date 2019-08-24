@@ -57,7 +57,7 @@ config.get('apps').forEach(app => {
     const { title, handler } = cApp;
     const src = app.url ? app.url : cApp.src;
     appGroup.addApp({
-      pathName: `${config.getCustomPath()}/${app.custom}`,
+      path: `${config.getCustomPath()}/${app.custom}`,
       title,
       src,
       icon,

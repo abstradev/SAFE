@@ -15,11 +15,13 @@ class SafeController {
   }
 
   loadHandler(event, appPath) {
+    console.log(appPath);
     const handlerPath = path.join(appPath, 'handler.js');
     try {
       require(handlerPath)(new SafeHandler());
     } catch (err) {
       console.log('Failed to load custom handler');
+      console.log(err);
     }
   }
 }

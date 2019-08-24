@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const hash = require('object-hash');
 const fs = require('fs');
 const path = require('path');
-const debug = false;
+const debug = true;
 
 if (!document) {
   throw Error("Must be in a renderer");
@@ -298,6 +298,9 @@ const AppPrivate = {
 
     const appWebviewDidStopLoadingHandler = function (e) {
       this.webviewWrapper.classList.remove('loading');
+      if (this.javascript) {
+        this.webview.executeJavaScript(this.javascript);
+      }
     }
 
     this.webview.classList.add(this.appGroup.options.viewClass);
@@ -333,6 +336,12 @@ const AppPrivate = {
             this.webview.send('poll');
           }
         }
+      } else if (event.channel === 'user-agent') {
+        //Set custom user agent
+        this.webview.setAttribute('useragent', event.args[0]);
+      } else if (event.channel === 'execute-javascript') {
+        this.webview.executeJavaScript(event.args[0]);
+        this.javascript = event.args[0];
       } else {
         //Handle other
         console.log('Received: ' + event.channel);

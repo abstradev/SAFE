@@ -1,6 +1,6 @@
 const config = {
-  title: 'Google Example',
-  src: 'https://google.com',
+  title: 'WhatsApp',
+  src: 'https://web.whatsapp.com',
   icon: true,
   handler: true
 };
