@@ -18,7 +18,17 @@ body {
   text-align: center;
   z-index: 200;
   background: #2d2f31;
-  overflow: none;
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: orange;
 }
 
 .safe-appgroup {
