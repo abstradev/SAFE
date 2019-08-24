@@ -1,2 +1,2 @@
-# safe
+# SAFE
 SAFE - Single App For Everything
