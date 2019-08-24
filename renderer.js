@@ -1,6 +1,7 @@
 const AppGroup = require('./safe-switcher/index');
 const Config = require('./config');
-const { ipcMain } = require('electron');
+const { ipcRenderer } = require('electron');
+const path = require('path');
 
 //Read/load config or default config
 const config = new Config({
@@ -39,30 +40,28 @@ config.get('apps').forEach(app => {
     //Built-in
     const bApp = require(`./apps/${app.app}`);
     const icon = bApp.icon ? `./apps/${app.app}/icon.svg` : '';
-    const { title, src, preload } = bApp;
+    const { title, handler } = bApp;
+    const src = app.url ? app.url : bApp.src;
+    const appPath = __dirname + `/apps/${app.app}/`;
     appGroup.addApp({
-      path: `./apps/${app.app}`,
+      path: appPath,
       title,
       src,
       icon,
-      preload
+      handler
     });
   } else if (app.custom) {
     //Custom
     const cApp = require(`${config.getCustomPath()}/${app.custom}`);
     const icon = cApp.icon ? `${config.getCustomPath()}/${app.custom}/icon.svg` : '';
-    const { title, src, preload } = cApp;
+    const { title, handler } = cApp;
+    const src = app.url ? app.url : cApp.src;
     appGroup.addApp({
       pathName: `${config.getCustomPath()}/${app.custom}`,
       title,
       src,
       icon,
-      preload
+      handler
     });
   }
-});
-
-ipcMain.on('notification', (event, arg) => {
-  console.log(event);
-  console.log(arg);
 });

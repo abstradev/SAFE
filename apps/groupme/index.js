@@ -1,6 +1,6 @@
 const config = {
-  title: 'Gmail',
-  src: 'https://gmail.com',
+  title: 'GroupMe',
+  src: 'https://web.groupme.com',
   icon: true,
   handler: true
 };

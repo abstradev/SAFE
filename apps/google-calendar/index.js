@@ -1,9 +1,7 @@
 const config = {
   title: 'Google Calendar',
   src: 'https://calendar.google.com',
-  icon: {
-    name: 'google-calendar'
-  }
+  icon: true
 };
 
 module.exports = config;

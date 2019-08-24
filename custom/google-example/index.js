@@ -1,8 +1,8 @@
 const config = {
   title: 'Google Example',
   src: 'https://google.com',
-  preload: true,
-  icon: true
+  icon: true,
+  integration: true
 };
 
 module.exports = config;

@@ -83,21 +83,6 @@ body {
   float: left;
 }
 
-.safe-app-badge {
-  position: absolute;
-  right: 0;
-  top: -7px;
-  background: red;
-  border-radius: 100%;
-  text-align: center;
-  font-size: 10px;
-  padding: 0 5px;
-}
-
-.safe-app-badge.hidden {
-  display: none;
-}
-
 .safe-app-icon {
   display: inline-block;
   height: 34px;
@@ -106,6 +91,26 @@ body {
 .safe-app-icon img {
   max-width: 16px;
   max-height: 16px;
+}
+
+.safe-app-badge {
+  align-items: center;
+  background: #D9534F;
+  border-radius: 20px;
+  top: 11px;
+  color: #FFF;
+  display: flex;
+  font-size: 11px;
+  justify-content: center;
+  min-height: 17px;
+  min-width: 10px;
+  padding: 0px 5px;
+  position: absolute;
+  right: 8px;
+}
+
+.safe-app-badge.hidden {
+  display: none;
 }
 
 .safe-views {

@@ -1,6 +1,9 @@
 // Source Switcher
 const EventEmitter = require('events');
 const hash = require('object-hash');
+const fs = require('fs');
+const path = require('path');
+const debug = false;
 
 if (!document) {
   throw Error("Must be in a renderer");
@@ -117,12 +120,12 @@ class App extends EventEmitter {
       useragent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) safe/0.0.1 Chrome/69.0.3497.128 Electron/4.2.8 Safari/537.36',
       allowpopups: 'on',
       partition: `persist:${appHash}`,
-      preload: './webview/perload.js'
+      preload: './safe-switcher/webview/preload.js'
     };
     this.webviewAttributes.src = args.src;
     this.webviewAttributes.id = args.title;
     this.path = args.path;
-    this.preload = args.preload;
+    this.handler = args.handler;
     AppPrivate.initApp.bind(this)();
     AppPrivate.initWebview.bind(this)();
     if (args.visible !== false) {
@@ -130,6 +133,15 @@ class App extends EventEmitter {
     }
     if (typeof args.ready === 'function') {
       args.ready(this);
+    }
+  }
+
+  setBadgeCount(count) {
+    if (count > 0) {
+      this.badge.innerHTML = count;
+      this.badge.classList.remove('hidden');
+    } else {
+      this.badge.classList.add('hidden');
     }
   }
 
@@ -251,6 +263,9 @@ const AppPrivate = {
       this.appElements[el] = span;
     }
     let iconEle = app.appendChild(document.createElement('img'));
+    this.badge = app.appendChild(document.createElement('span'));
+    this.badge.classList.add('safe-app-badge');
+    this.badge.classList.add('hidden');
     iconEle.classList.add('safe-app-icon');
     iconEle.src = this.icon;
 
@@ -298,8 +313,29 @@ const AppPrivate = {
     this.webview.addEventListener('did-start-loading', appWebviewDidStartLoadingHandler.bind(this));
     this.webview.addEventListener('did-stop-loading', appWebviewDidStopLoadingHandler.bind(this));
     this.webview.addEventListener('dom-ready', () => {
-      if (this.preload) {
-        this.webview.executeJavaScript(`${this.path}/preload.js`);
+    });
+    this.webview.addEventListener('console-message', e => {
+      if (debug) {
+        console.log(`Webview [${this.title}]: ${e.message}`);
+      }
+    });
+    
+    this.webview.addEventListener('ipc-message', (event) => {
+      if (event.channel === 'badge') {
+        //Handle badge update
+        const badgeCount = event.args[0];
+        this.setBadgeCount(badgeCount);
+      } else if (event.channel === 'load-ready') {
+        if (this.handler) {
+          this.webview.send('load', this.path);
+          let poller = new Worker('safe-switcher/webview/worker.js');
+          poller.onmessage = (event) => {
+            this.webview.send('poll');
+          }
+        }
+      } else {
+        //Handle other
+        console.log('Received: ' + event.channel);
       }
     });
   }
