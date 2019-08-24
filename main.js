@@ -1,7 +1,8 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow, Tray, Menu} = require('electron')
 const path = require('path')
 
 let mainWindow
+let tray
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -18,9 +19,13 @@ function createWindow () {
 
   mainWindow.loadFile('index.html')
 
-  mainWindow.on('closed', function () {
-    mainWindow = null
-  })
+  mainWindow.on('close', function (event) {
+    if (!app.isQuitting) {
+      event.preventDefault();
+      mainWindow.hide();
+    }
+    return false;
+  });
 }
 
 app.on('browser-window-created', function (e, window) {
@@ -36,3 +41,18 @@ app.on('window-all-closed', function () {
 app.on('activate', function () {
   if (mainWindow === null) createWindow()
 })
+
+app.on('ready', () => {
+  tray = new Tray('./build/icon.png');
+  const contextMenu = Menu.buildFromTemplate([
+    { label: 'Open', click: function () {
+      mainWindow.show();
+    }},
+    { label: 'Close', click: function () {
+      app.isQuitting = true;
+      app.quit();
+    }}
+  ]);
+  tray.setToolTip('SAFE');
+  tray.setContextMenu(contextMenu);
+});
