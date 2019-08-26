@@ -40,7 +40,7 @@ app.on('activate', function () {
 })
 
 app.on('ready', () => {
-  tray = new Tray('./build/icon.png');
+  tray = new Tray(path.join(__dirname, 'build/icon.png'));
   const contextMenu = Menu.buildFromTemplate([
     { label: 'Open', click: function () {
       mainWindow.show();
