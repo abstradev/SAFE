@@ -9,6 +9,15 @@
       "category": "productivity"
     }
   },
+  "extraFiles": [
+    {
+      "from": "resources",
+      "to": "resources",
+      "filter": [
+        "**/*"
+      ]
+    }
+  ],
   "scripts": {
     "start": "electron .",
     "pack": "electron-builder --dir",

@@ -3,7 +3,7 @@ const EventEmitter = require('events');
 const hash = require('object-hash');
 const fs = require('fs');
 const path = require('path');
-const debug = true;
+const debug = false;
 
 if (!document) {
   throw Error("Must be in a renderer");
