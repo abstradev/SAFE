@@ -1,8 +1,12 @@
-const {app, BrowserWindow, Tray, Menu, nativeImage } = require('electron')
+const {app, BrowserWindow, Tray, Menu, nativeImage, shell } = require('electron')
+const contextMenu = require('electron-context-menu');
 const path = require('path')
 
 let mainWindow
 let tray
+
+
+contextMenu({});
 
 function createWindow () {
   mainWindow = new BrowserWindow({
@@ -55,4 +59,18 @@ app.on('ready', () => {
   ]);
   tray.setToolTip('SAFE');
   tray.setContextMenu(contextMenu);
+});
+
+app.on('web-contents-created', (e, contents) => {
+  if (contents.getType == 'webview') {
+    console.log('init webview');
+    contents.on('new-window', (e, url) => {
+      e.preventDefault()
+      shell.openExternal(url);
+    });
+
+    contextMenu({
+      window: contents
+    });
+  }
 });
