@@ -39,7 +39,7 @@ config.get('apps').forEach(app => {
   if (app.app) {
     //Built-in
     const bApp = require(`./apps/${app.app}`);
-    const icon = bApp.icon ? `./apps/${app.app}/icon.svg` : '';
+    const icon = bApp.icon ? `./apps/${app.app}/icon.${bApp.icon}` : '';
     const { title, handler } = bApp;
     const src = app.url ? app.url : bApp.src;
     const appPath = __dirname + `/apps/${app.app}/`;
@@ -53,7 +53,7 @@ config.get('apps').forEach(app => {
   } else if (app.custom) {
     //Custom
     const cApp = require(`${config.getCustomPath()}/${app.custom}`);
-    const icon = cApp.icon ? `${config.getCustomPath()}/${app.custom}/icon.svg` : '';
+    const icon = cApp.icon ? `${config.getCustomPath()}/${app.custom}/icon.${cApp.icon}` : '';
     const { title, handler } = cApp;
     const src = app.url ? app.url : cApp.src;
     appGroup.addApp({

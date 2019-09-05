@@ -1,7 +1,7 @@
 const config = {
   title: 'WhatsApp',
   src: 'https://web.whatsapp.com',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 

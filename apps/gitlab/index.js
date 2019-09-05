@@ -1,7 +1,7 @@
 const config = {
   title: 'GitLab',
   src: 'https://gitlab.com',
-  icon: true
+  icon: 'svg'
 };
 
 module.exports = config;

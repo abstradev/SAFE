@@ -1,7 +1,7 @@
 const config = {
   title: 'Slack',
   src: 'https://slack.com',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 

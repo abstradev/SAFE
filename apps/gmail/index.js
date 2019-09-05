@@ -1,7 +1,7 @@
 const config = {
   title: 'Gmail',
   src: 'https://gmail.com',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 

@@ -1,7 +1,7 @@
 const config = {
   title: 'Android Messages',
   src: 'https://messages.google.com/web',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 

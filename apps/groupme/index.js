@@ -1,7 +1,7 @@
 const config = {
   title: 'GroupMe',
   src: 'https://web.groupme.com',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 

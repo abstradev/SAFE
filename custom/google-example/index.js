@@ -1,7 +1,7 @@
 const config = {
   title: 'Google Example',
   src: 'https://google.com',
-  icon: true,
+  icon: 'svg',
   handler: true
 };
 
