@@ -44,8 +44,7 @@ app.on('activate', function () {
 })
 
 app.on('ready', () => {
-  const imgPath = path.join('resources', 'icon.png');
-  console.log(imgPath);
+  const imgPath = path.join(__dirname, 'resources', 'icon.png');
   const img = nativeImage.createFromPath(imgPath);
   tray = new Tray(img);
   const contextMenu = Menu.buildFromTemplate([
@@ -63,7 +62,6 @@ app.on('ready', () => {
 
 app.on('web-contents-created', (e, contents) => {
   if (contents.getType == 'webview') {
-    console.log('init webview');
     contents.on('new-window', (e, url) => {
       e.preventDefault()
       shell.openExternal(url);
