@@ -125,10 +125,10 @@ body {
 
 .safe-app-timer {
   align-items: center;
-  background: #A9E4FF;
+  background: #D9534F;
   border-radius: 20px;
   bottom: 11px;
-  color: #FFF;
+  color: #000;
   display: flex;
   font-size: 11px;
   justify-content: center;
