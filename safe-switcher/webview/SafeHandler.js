@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 class SafeHandler {
   constructor() {
     this.badgeCount = 0;
+    this.timer = null;
 
     ipcRenderer.on('poll', () => {
       this.loop();
@@ -32,6 +33,12 @@ class SafeHandler {
 
     ipcRenderer.sendToHost('badge', count);
     this.badgeCount = count;
+  }
+
+  setTimer(timer = null) {
+    if (this.timer === timer) return;
+    ipcRenderer.sendToHost('timer', timer);
+    this.timer = timer;
   }
 
   applyCSS(file) {

@@ -123,6 +123,26 @@ body {
   display: none;
 }
 
+.safe-app-timer {
+  align-items: center;
+  background: #A9E4FF;
+  border-radius: 20px;
+  bottom: 11px;
+  color: #FFF;
+  display: flex;
+  font-size: 11px;
+  justify-content: center;
+  min-height: 17px;
+  min-width: 10px;
+  padding: 0px 5px;
+  position: absolute;
+  right: 8px;
+}
+
+.safe-app-timer.hidden {
+  display: none;
+}
+
 .safe-views {
   position: relative;
   height: 100%;

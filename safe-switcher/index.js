@@ -146,6 +146,15 @@ class App extends EventEmitter {
     }
   }
 
+  setTimer(timer) {
+    if (timer != null) {
+      this.timer.innerHTML = timer;
+      this.timer.classList.remove('hidden');
+    } else {
+      this.timer.classList.add('hidden');
+    }
+  }
+
   getTitle () {
     return this.title;
   }
@@ -267,6 +276,9 @@ const AppPrivate = {
     this.badge = app.appendChild(document.createElement('span'));
     this.badge.classList.add('safe-app-badge');
     this.badge.classList.add('hidden');
+    this.timer = app.appendChild(document.createElement('span'));
+    this.timer.classList.add('safe-app-timer');
+    this.timer.classList.add('hidden');
     iconEle.classList.add('safe-app-icon');
     iconEle.src = this.icon;
 
@@ -336,6 +348,9 @@ const AppPrivate = {
         //Handle badge update
         const badgeCount = event.args[0];
         this.setBadgeCount(badgeCount);
+      } else if (event.channel === 'timer') {
+        const timer = event.args[0];
+        this.setTimer(timer);
       } else if (event.channel === 'load-ready') {
         if (this.handler) {
           this.webview.send('load', this.path);
