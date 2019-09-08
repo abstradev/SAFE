@@ -61,7 +61,7 @@ app.on('ready', () => {
 });
 
 app.on('web-contents-created', (e, contents) => {
-  if (contents.getType == 'webview') {
+  if (contents.getType() == 'webview') {
     contents.on('new-window', (e, url) => {
       e.preventDefault()
       shell.openExternal(url);

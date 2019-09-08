@@ -3,7 +3,6 @@ const EventEmitter = require('events');
 const hash = require('object-hash');
 const fs = require('fs');
 const path = require('path');
-const contextMenu = require('electron-context-menu');
 const debug = false;
 
 if (!document) {
@@ -314,9 +313,6 @@ const AppPrivate = {
       if (this.javascript) {
         this.webview.executeJavaScript(this.javascript);
       }
-      contextMenu({
-        window: this.webview
-      });
 
       this.webview.blur();
       this.webview.focus();
