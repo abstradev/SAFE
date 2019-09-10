@@ -63,8 +63,11 @@ app.on('ready', () => {
 app.on('web-contents-created', (e, contents) => {
   if (contents.getType() == 'webview') {
     contents.on('new-window', (e, url) => {
-      e.preventDefault()
-      shell.openExternal(url);
+      //Quickfix for Slack Calling
+      if (!url.includes('app.slack.com')) {
+        e.preventDefault()
+        shell.openExternal(url);
+      }
     });
 
     contextMenu({
