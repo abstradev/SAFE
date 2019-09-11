@@ -48,7 +48,8 @@ config.get('apps').forEach(app => {
       title,
       src,
       icon,
-      handler
+      handler,
+      useragent: bApp.useragent ? bApp.useragent : null
     });
   } else if (app.custom) {
     //Custom
@@ -61,7 +62,8 @@ config.get('apps').forEach(app => {
       title,
       src,
       icon,
-      handler
+      handler,
+      useragent: cApp.useragent ? cApp.useragent : null
     });
   }
 });

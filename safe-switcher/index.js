@@ -117,7 +117,7 @@ class App extends EventEmitter {
     const appHash = hash(args);
     this.webviewAttributes = {
       autosize: 'on',
-      useragent: 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) safe/0.0.1 Chrome/69.0.3497.128 Electron/4.2.8 Safari/537.36',
+      useragent: args.useragent ? args.useragent : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) safe/0.0.1 Chrome/69.0.3497.128 Electron/4.2.8 Safari/537.36',
       allowpopups: 'on',
       partition: `persist:${appHash}`,
       preload: './safe-switcher/webview/preload.js'
@@ -357,6 +357,8 @@ const AppPrivate = {
         }
       } else if (event.channel === 'user-agent') {
         //Set custom user agent
+        console.log('Setting user agent to: ');
+        console.log(event.args[0]);
         this.webview.setAttribute('useragent', event.args[0]);
       } else if (event.channel === 'execute-javascript') {
         this.webview.executeJavaScript(event.args[0]);
