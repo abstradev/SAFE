@@ -1,6 +1,6 @@
 {
   "name": "safe",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "description": "SAFE - Single App For Everything",
   "main": "main.js",
   "build": {
@@ -39,6 +39,7 @@
     "electron-builder": "^21.2.0"
   },
   "dependencies": {
+    "about-window": "^1.13.2",
     "electron-context-menu": "^0.15.0",
     "fs-extra": "^8.1.0",
     "ncp": "^2.0.0",

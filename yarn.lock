@@ -37,6 +37,11 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-10.14.17.tgz#b96d4dd3e427382482848948041d3754d40fd5ce"
   integrity sha512-p/sGgiPaathCfOtqu2fx5Mu1bcjuP8ALFg4xpGgNkcin7LwRyzUKniEHBKdcE1RPsenq5JVPIpMTJSygLboygQ==
 
+about-window@^1.13.2:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/about-window/-/about-window-1.13.2.tgz#299ac5f410468ecc54068b04c9be90f3ea311044"
+  integrity sha512-qjgDbDW/JwL3mIaXeLOIr/AHjXzqM9XjKRPlW+8hlCKjvYLbSX+9hzBJ8Le0bA/SUtr7fkq29uBumYcl14k6oQ==
+
 ajv-keywords@^3.1.0:
   version "3.4.1"
   resolved "https://registry.yarnpkg.com/ajv-keywords/-/ajv-keywords-3.4.1.tgz#ef916e271c64ac12171fd8384eaae6b2345854da"
