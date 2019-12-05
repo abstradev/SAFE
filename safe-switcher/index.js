@@ -127,7 +127,9 @@ class App extends EventEmitter {
     this.path = args.path;
     this.handler = args.handler;
     AppPrivate.initApp.bind(this)();
-    AppPrivate.initWebview.bind(this)();
+    if (!args.lazyLoad) {
+      AppPrivate.initWebview.bind(this)();
+    }
     if (args.visible !== false) {
       this.show();
     }
@@ -213,6 +215,10 @@ class App extends EventEmitter {
   }
 
   activate () {
+    if (!this.webview) {
+      // If not loaded yet, load.
+      AppPrivate.initWebview.bind(this)();
+    }
     let activeApp = this.appGroup.getActiveApp();
     let safeOverlay = document.getElementById('safe-overlay');
     if (activeApp) {

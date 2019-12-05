@@ -48,6 +48,7 @@ config.get('apps').forEach(app => {
       title,
       src,
       icon,
+      lazyLoad: app.lazyLoad,
       handler,
       useragent: bApp.useragent ? bApp.useragent : null
     });
@@ -62,6 +63,7 @@ config.get('apps').forEach(app => {
       title,
       src,
       icon,
+      lazyLoad: app.lazyLoad,
       handler,
       useragent: cApp.useragent ? cApp.useragent : null
     });
