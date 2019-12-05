@@ -8,6 +8,13 @@ let tray
 
 contextMenu({});
 
+// Enforce single instance
+if (!app.requestSingleInstanceLock()) {
+  // If already running, quit and exit.
+  app.quit();
+  process.exit();
+}
+
 function createWindow () {
   mainWindow = new BrowserWindow({
     width: 800,
@@ -28,6 +35,12 @@ function createWindow () {
     return false;
   });
 }
+
+app.on('second-instance', (event, commandLine, workingDirectory) => {
+  if (mainWindow) {
+    mainWindow.show();
+  }
+});
 
 app.on('browser-window-created', function (e, window) {
     window.setMenu(null);
